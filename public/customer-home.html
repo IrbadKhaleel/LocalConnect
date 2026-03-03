@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* TEXT LOGO STYLES */
+        /* TEXT LOGO STYLES - Green "Local" + Orange "Connect" */
         .logo-link {
             display: flex;
             align-items: center;
@@ -21,16 +21,27 @@
         .logo-text {
             font-size: 28px;
             font-weight: 700;
-            color: #7bb042;
+            color: #7bb042 !important; /* Green for "Local" */
             letter-spacing: -0.5px;
+            filter: none !important;
         }
 
         .logo-accent {
-            color: #fc7217;
+            color: #fc7217 !important; /* Orange for "Connect" */
+            filter: none !important;
         }
 
         .logo-link:hover .logo-text {
             transform: scale(1.02);
+        }
+
+        /* Override any conflicting logo styles */
+        .customer-header .logo-text,
+        .customer-header .logo-accent,
+        h1 .logo-text,
+        h1 .logo-accent {
+            filter: none !important;
+            -webkit-filter: none !important;
         }
 
         @media (max-width: 768px) {

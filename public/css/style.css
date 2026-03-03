@@ -110,6 +110,10 @@ header a:hover {
     height: 64px;
     width: auto;
     transition: transform 0.2s ease;
+    /* Ensure no color modifications */
+    filter: none !important;
+    -webkit-filter: none !important;
+    object-fit: contain;
 }
 
 .logo-img:hover {
@@ -120,17 +124,21 @@ header a:hover {
 .dashboard-header .logo-img,
 .customer-header .logo-img {
     height: 48px;
+    filter: none !important;
+    -webkit-filter: none !important;
 }
 
 /* Responsive logo sizing */
 @media (max-width: 768px) {
     .logo-img {
         height: 48px;
+        filter: none !important;
     }
 
     .dashboard-header .logo-img,
     .customer-header .logo-img {
         height: 40px;
+        filter: none !important;
     }
 }
 
