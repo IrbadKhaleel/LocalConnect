@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LocalConnect - Your trusted local food delivery platform connecting customers with quality vendors">
+    <title>LocalConnect - Your Local Food Delivery Platform</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        /* TEXT LOGO STYLES */
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        .logo:hover .logo-text {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: #7bb042;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6a9e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123,176,66,0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #7bb042;
+            border: 2px solid #7bb042;
+        }
+
+        .btn-secondary:hover {
+            background: #7bb042;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123,176,66,0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #7bb042 0%, #6a9e3a 100%);
+            color: white;
+            padding: 160px 24px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .hero-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            margin-bottom: 24px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero .btn {
+            font-size: 18px;
+            padding: 16px 40px;
+        }
+
+        .hero .btn-secondary {
+            background: white;
+            color: #7bb042;
+            border: none;
+        }
+
+        .hero .btn-secondary:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 24px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #7F8C8D;
+            margin-bottom: 60px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 48px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 32px;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid #E9ECEF;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .step-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #474747;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: #7F8C8D;
+            line-height: 1.6;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid #E9ECEF;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #474747;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #7F8C8D;
+            line-height: 1.6;
+        }
+
+        /* For Vendors */
+        .for-vendors {
+            background: #F8F9FA;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .vendor-benefits {
+            list-style: none;
+        }
+
+        .vendor-benefits li {
+            padding: 20px 0;
+            border-bottom: 1px solid #E9ECEF;
+            display: flex;
+            align-items: start;
+            gap: 16px;
+        }
+
+        .vendor-benefits li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: #7bb042;
+            font-size: 24px;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        .vendor-benefits strong {
+            color: #474747;
+            font-weight: 600;
+        }
+
+        /* Stats */
+        .stats {
+            background: linear-gradient(135deg, #7bb042 0%, #6a9e3a 100%);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: #000000;
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .cta p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta .btn-primary {
+            background: #fc7217;
+        }
+
+        .cta .btn-primary:hover {
+            background: #e66815;
+            box-shadow: 0 6px 20px rgba(252,114,23,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            color: white;
+            padding: 80px 24px 32px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #7bb042;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 140px 24px 80px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero .btn {
+                font-size: 16px;
+                padding: 14px 32px;
+                width: 100%;
+            }
+
+            .section {
+                padding: 60px 24px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stat-number {
+                font-size: 40px;
+            }
+
+            .cta h2 {
+                font-size: 32px;
+            }
+
+            .vendor-emoji {
+                display: none;
+            }
+
+            .steps {
+                gap: 24px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-text">Local<span class="logo-accent">Connect</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#how-it-works">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="#for-vendors">For Vendors</a>
+                <a href="/login.html" class="btn btn-secondary">Login</a>
+                <a href="/register.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>Delicious Food, Delivered Fresh</h1>
+            <p>Connect with local vendors and enjoy authentic meals delivered right to your doorstep</p>
+            <div class="hero-buttons">
+                <a href="/customer-home.html" class="btn btn-primary">Order Now</a>
+                <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get your favorite meals in 3 simple steps</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">📱</div>
+                    <h3>Browse Vendors</h3>
+                    <p>Explore local restaurants and food vendors in your area with diverse cuisines</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🍽️</div>
+                    <h3>Place Your Order</h3>
+                    <p>Select your favorite dishes, customize your order, and checkout securely</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🚀</div>
+                    <h3>Enjoy Fresh Food</h3>
+                    <p>Track your order and receive delicious food delivered fresh to your door</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features" style="background: #F8F9FA;">
+        <div class="container">
+            <h2 class="section-title">Why Choose LocalConnect</h2>
+            <p class="section-subtitle">Experience the best food delivery platform</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick and reliable delivery service to get your food while it's hot</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Payments</h3>
+                    <p>Multiple payment options with industry-standard security</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Quality Assurance</h3>
+                    <p>Rate and review vendors to ensure the best quality service</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Best Prices</h3>
+                    <p>Competitive pricing with no hidden fees</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Local Support</h3>
+                    <p>Supporting local businesses and community vendors</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Track your order status from preparation to delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Vendors -->
+    <section class="section for-vendors" id="for-vendors">
+        <div class="container">
+            <div class="two-column">
+                <div>
+                    <h2 class="section-title" style="text-align: left;">Grow Your Business</h2>
+                    <p class="section-subtitle" style="text-align: left;">Join LocalConnect as a vendor and reach more customers</p>
+                    <ul class="vendor-benefits">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong>Easy Setup</strong><br>
+                                <span style="color: #7F8C8D;">Get started in minutes with our simple onboarding process</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong>Dashboard Analytics</strong><br>
+                                <span style="color: #7F8C8D;">Track sales, orders, and revenue in real-time</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong>Secure Payments</strong><br>
+                                <span style="color: #7F8C8D;">Receive payments directly with transparent fees</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong>Customer Reviews</strong><br>
+                                <span style="color: #7F8C8D;">Build your reputation with customer feedback</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 32px;">
+                        <a href="/register.html" class="btn btn-primary">Become a Vendor</a>
+                    </div>
+                </div>
+                <div class="vendor-emoji" style="text-align: center; font-size: 200px;">
+                    🏪
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div>
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Local Vendors</div>
+                </div>
+                <div>
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Orders Delivered</div>
+                </div>
+                <div>
+                    <div class="stat-number">4.8★</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of satisfied customers enjoying delicious local food</p>
+            <a href="/register.html" class="btn btn-primary" style="font-size: 18px; padding: 16px 48px;">Sign Up Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <span class="logo-text" style="margin-bottom: 12px; display: inline-block;">Local<span class="logo-accent">Connect</span></span>
+                    <p style="color: #95a5a6;">Your trusted local food delivery platform connecting customers with quality vendors.</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="/customer-home.html">Browse Vendors</a></li>
+                        <li><a href="/register.html">Sign Up</a></li>
+                        <li><a href="/login.html">Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>For Vendors</h4>
+                    <ul class="footer-links">
+                        <li><a href="/register.html">Become a Vendor</a></li>
+                        <li><a href="/vendor-dashboard.html">Vendor Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LocalConnect. All rights reserved. | Built with love for local communities</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

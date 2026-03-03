@@ -1,0 +1,39 @@
+{
+  "name": "localconnect",
+  "version": "1.0.0",
+  "description": "Food delivery platform connecting customers with local vendors in Kano, Nigeria",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "setup-db": "node setup-aiven-db.js",
+    "convert-seed": "node convert-seed-to-aiven.js",
+    "convert-final": "node final-converter.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "food",
+    "delivery",
+    "nigeria",
+    "kano",
+    "marketplace"
+  ],
+  "author": "Irbad Khaleel",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.4",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

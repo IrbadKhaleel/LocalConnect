@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register for LocalConnect">
+    <title>Register - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+    /* TEXT LOGO STYLES */
+    .logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .logo-text {
+        font-size: 28px;
+        font-weight: 700;
+        color: #7bb042;
+        letter-spacing: -0.5px;
+    }
+
+    .logo-accent {
+        color: #fc7217;
+    }
+
+    .logo-link:hover .logo-text {
+        transform: scale(1.02);
+    }
+
+    @media (max-width: 768px) {
+        .logo-text {
+            font-size: 24px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo-link">
+                <span class="logo-text">Local<span class="logo-accent">Connect</span></span>
+            </a>
+        </header>
+
+        <main>
+            <div class="form-card">
+                <h2>Create Your Account</h2>
+
+                <div id="message" class="message"></div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            minlength="2"
+                            placeholder="Enter your full name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            placeholder="Enter your email"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            minlength="6"
+                            placeholder="At least 6 characters"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter your phone number"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">I am a</label>
+                        <select id="role" name="role" required>
+                            <option value="">Select your role...</option>
+                            <option value="customer">Customer</option>
+                            <option value="vendor">Vendor</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">Register</button>
+                </form>
+
+                <p class="form-footer">
+                    Already have an account? <a href="/login.html">Login here</a>
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/register.js"></script>
+</body>
+</html>

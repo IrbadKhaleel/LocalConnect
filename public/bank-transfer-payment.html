@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transfer - Paystack</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .paystack-popup {
+            background: #fff;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-header {
+            background: #011b33;
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header .title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .popup-header .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .popup-header .back-btn:hover {
+            opacity: 1;
+        }
+
+        .amount-section {
+            background: #f8f9fa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            color: #687179;
+            margin-bottom: 4px;
+        }
+
+        .amount-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #011b33;
+        }
+
+        .merchant-name {
+            font-size: 13px;
+            color: #687179;
+            margin-top: 6px;
+        }
+
+        .transfer-section {
+            padding: 24px;
+        }
+
+        .timer-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer-icon {
+            color: #856404;
+        }
+
+        .timer-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .timer-text {
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .timer-value {
+            font-weight: 600;
+        }
+
+        .bank-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #687179;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #011b33;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #00c3f7;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            color: #00b0e0;
+        }
+
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .instructions p {
+            font-size: 14px;
+            color: #1565c0;
+            line-height: 1.5;
+        }
+
+        .instructions strong {
+            color: #0d47a1;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 14px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .confirm-btn:hover:not(:disabled) {
+            background: #219a52;
+        }
+
+        .confirm-btn:disabled {
+            background: #95d5b2;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #687179;
+            border: 1.5px solid #d4dbe0;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn:hover {
+            border-color: #687179;
+            color: #011b33;
+        }
+
+        .secure-badge {
+            text-align: center;
+            padding: 16px 24px 24px;
+            font-size: 12px;
+            color: #687179;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .secure-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e5e5e5;
+            border-top-color: #00c3f7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #011b33;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .loading-subtext {
+            font-size: 13px;
+            color: #687179;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .copied-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #011b33;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 3000;
+        }
+
+        .copied-toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .bank-details {
+                padding: 16px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .detail-value {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Cancel confirmation modal */
+        .cancel-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cancel-modal.show {
+            display: flex;
+        }
+
+        .cancel-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .cancel-modal-content h3 {
+            font-size: 20px;
+            color: #011b33;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .cancel-modal-content p {
+            font-size: 14px;
+            color: #687179;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .cancel-modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .cancel-modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-modal-btn.primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .cancel-modal-btn.primary:hover {
+            background: #c0392b;
+        }
+
+        .cancel-modal-btn.secondary {
+            background: #f8f9fa;
+            color: #011b33;
+            border: 1.5px solid #d4dbe0;
+        }
+
+        .cancel-modal-btn.secondary:hover {
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="paystack-popup">
+        <div class="popup-header">
+            <button class="back-btn" onclick="goBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+            <div class="title">Pay with Bank Transfer</div>
+            <div style="width: 28px;"></div>
+        </div>
+
+        <div class="amount-section">
+            <div class="amount-label">Transfer exactly</div>
+            <div class="amount-value" id="displayAmount">₦0.00</div>
+            <div class="merchant-name">to <span id="merchantName">LocalConnect</span></div>
+        </div>
+
+        <div class="transfer-section">
+            <div class="timer-box">
+                <div class="timer-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="timer-text">
+                    Transfer expires in <span class="timer-value" id="timerDisplay">15:00</span>
+                </div>
+            </div>
+
+            <div class="bank-details">
+                <div class="detail-row">
+                    <span class="detail-label">Bank Name</span>
+                    <span class="detail-value">Wema Bank</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Account Number</span>
+                    <span class="detail-value">
+                        <span id="accountNumber">7891234567</span>
+                        <button class="copy-btn" onclick="copyToClipboard('accountNumber')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Account Name</span>
+                    <span class="detail-value" id="accountName">LocalConnect - Order #123</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Reference</span>
+                    <span class="detail-value">
+                        <span id="paymentReference">mock_123_456</span>
+                        <button class="copy-btn" onclick="copyToClipboard('paymentReference')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <p>Transfer <strong id="instructionAmount">₦0.00</strong> to the account above. Use your bank app or USSD to complete the transfer.</p>
+            </div>
+
+            <button class="confirm-btn" id="confirmBtn" onclick="confirmTransfer()">
+                I've sent the money
+            </button>
+
+            <button class="cancel-btn" onclick="goBack()">
+                Cancel
+            </button>
+        </div>
+
+        <div class="secure-badge">
+            <svg viewBox="0 0 14 16" fill="currentColor">
+                <rect x="1" y="6" width="12" height="9" rx="2" fill="#687179"/>
+                <path d="M3 6V4c0-2.21 1.79-4 4-4s4 1.79 4 4v2" stroke="#687179" stroke-width="2" fill="none"/>
+            </svg>
+            Secured by Paystack
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content" id="loadingContent">
+            <div class="spinner"></div>
+            <div class="loading-text">Verifying transfer</div>
+            <div class="loading-subtext">Please wait...</div>
+        </div>
+    </div>
+
+    <div class="copied-toast" id="copiedToast">Copied to clipboard</div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="cancel-modal" id="cancelModal">
+        <div class="cancel-modal-content">
+            <h3>Cancel Payment?</h3>
+            <p>Are you sure you want to cancel this payment? Your order will not be processed.</p>
+            <div class="cancel-modal-buttons">
+                <button class="cancel-modal-btn secondary" onclick="closeCancelModal()">Continue Payment</button>
+                <button class="cancel-modal-btn primary" onclick="confirmCancel()">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="error-modal" id="errorModal">
+        <div class="error-modal-content">
+            <div class="error-icon">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <path d="M8 8L24 24M8 24L24 8" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Payment Failed</h3>
+            <p id="errorMessage">Something went wrong. Please try again.</p>
+            <button class="error-modal-btn" onclick="closeErrorModal()">Try Again</button>
+        </div>
+    </div>
+
+    <style>
+        .error-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .error-modal.show { display: flex; }
+        .error-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .error-icon svg { width: 32px; height: 32px; }
+        .error-modal-content h3 {
+            font-size: 20px;
+            color: #011b33;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .error-modal-content p {
+            font-size: 14px;
+            color: #687179;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .error-modal-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: #00c3f7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .error-modal-btn:hover { background: #00b0e0; }
+    </style>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('orderId');
+        const amount = params.get('amount');
+        const email = params.get('email');
+        const vendorName = params.get('vendor') || 'LocalConnect';
+
+        function formatCurrency(val) {
+            return '₦' + parseFloat(val).toLocaleString('en-NG', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function generateAccountNumber() {
+            let num = '789';
+            for (let i = 0; i < 7; i++) {
+                num += Math.floor(Math.random() * 10);
+            }
+            return num;
+        }
+
+        function generateReference() {
+            return 'mock_' + orderId + '_' + Date.now();
+        }
+
+        // Initialize page
+        if (amount) {
+            document.getElementById('displayAmount').textContent = formatCurrency(amount);
+            document.getElementById('instructionAmount').textContent = formatCurrency(amount);
+        }
+        document.getElementById('merchantName').textContent = vendorName;
+        document.getElementById('accountNumber').textContent = generateAccountNumber();
+        document.getElementById('accountName').textContent = `LocalConnect - Order #${orderId}`;
+
+        const reference = generateReference();
+        document.getElementById('paymentReference').textContent = reference;
+
+        // Timer
+        let timeLeft = 15 * 60;
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                showError('Transfer session expired. Please try again.');
+                return;
+            }
+            timeLeft--;
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copiedToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        async function confirmTransfer() {
+            const confirmBtn = document.getElementById('confirmBtn');
+            confirmBtn.disabled = true;
+
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingContent = document.getElementById('loadingContent');
+
+            loadingOverlay.classList.add('show');
+
+            // Simulate verification delay
+            await new Promise(resolve => setTimeout(resolve, 2500));
+
+            try {
+                const res = await fetch('/api/payments/confirm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        reference: reference,
+                        amount: amount
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    loadingContent.innerHTML = `
+                        <div class="success-icon">
+                            <svg viewBox="0 0 32 32" fill="none">
+                                <path d="M8 16l6 6L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="loading-text" style="color:#27ae60;">Transfer Confirmed!</div>
+                        <div class="loading-subtext">Redirecting...</div>
+                    `;
+
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('localconnect_cart');
+
+                    setTimeout(() => {
+                        window.location.href = 'my-orders.html';
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Verification failed');
+                }
+            } catch (error) {
+                loadingOverlay.classList.remove('show');
+                confirmBtn.disabled = false;
+                showError(error.message || 'Transfer verification failed. Please try again.');
+            }
+        }
+
+        function goBack() {
+            document.getElementById('cancelModal').classList.add('show');
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancelModal').classList.remove('show');
+        }
+
+        function confirmCancel() {
+            clearInterval(timerInterval);
+            window.location.href = 'checkout.html';
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.add('show');
+        }
+
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.remove('show');
+        }
+
+        if (!orderId) {
+            showError('Invalid payment session. Redirecting...');
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Money - Paystack</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .paystack-popup {
+            background: #fff;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-header {
+            background: #011b33;
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header .title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .popup-header .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .popup-header .back-btn:hover {
+            opacity: 1;
+        }
+
+        .amount-section {
+            background: #f8f9fa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            color: #687179;
+            margin-bottom: 4px;
+        }
+
+        .amount-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #011b33;
+        }
+
+        .merchant-name {
+            font-size: 13px;
+            color: #687179;
+            margin-top: 6px;
+        }
+
+        .providers-section {
+            padding: 24px;
+        }
+
+        .providers-section h3 {
+            font-size: 14px;
+            color: #687179;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .provider-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1.5px solid #d4dbe0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .provider-card:hover {
+            border-color: #00c3f7;
+            background: #f8f9fa;
+        }
+
+        .provider-card.selected {
+            border-color: #00c3f7;
+            background: #e3f7fc;
+        }
+
+        .provider-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .provider-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .provider-info {
+            flex: 1;
+        }
+
+        .provider-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #011b33;
+        }
+
+        .provider-desc {
+            font-size: 12px;
+            color: #687179;
+            margin-top: 2px;
+        }
+
+        .provider-arrow {
+            color: #687179;
+        }
+
+        .provider-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Phone input section (hidden initially) */
+        .phone-section {
+            display: none;
+            padding: 0 24px 24px;
+        }
+
+        .phone-section.show {
+            display: block;
+        }
+
+        .selected-provider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .selected-provider .provider-logo {
+            width: 36px;
+            height: 36px;
+        }
+
+        .selected-provider .provider-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .selected-provider-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #011b33;
+        }
+
+        .change-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #00c3f7;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .change-btn:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #011b33;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #d4dbe0;
+            border-radius: 4px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #00c3f7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #00c3f7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #00b0e0;
+        }
+
+        .submit-btn:disabled {
+            background: #b0d9e8;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #687179;
+            border: 1.5px solid #d4dbe0;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn:hover {
+            border-color: #687179;
+            color: #011b33;
+        }
+
+        .secure-badge {
+            text-align: center;
+            padding: 16px 24px 24px;
+            font-size: 12px;
+            color: #687179;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .secure-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e5e5e5;
+            border-top-color: #00c3f7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #011b33;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .loading-subtext {
+            font-size: 13px;
+            color: #687179;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .phone-icon {
+            width: 64px;
+            height: 64px;
+            background: #00c3f7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .phone-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            .provider-card {
+                padding: 14px;
+            }
+
+            .provider-logo {
+                width: 40px;
+                height: 40px;
+                font-size: 10px;
+            }
+        }
+
+        /* Cancel confirmation modal */
+        .cancel-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cancel-modal.show {
+            display: flex;
+        }
+
+        .cancel-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .cancel-modal-content h3 {
+            font-size: 20px;
+            color: #011b33;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .cancel-modal-content p {
+            font-size: 14px;
+            color: #687179;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .cancel-modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .cancel-modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-modal-btn.primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .cancel-modal-btn.primary:hover {
+            background: #c0392b;
+        }
+
+        .cancel-modal-btn.secondary {
+            background: #f8f9fa;
+            color: #011b33;
+            border: 1.5px solid #d4dbe0;
+        }
+
+        .cancel-modal-btn.secondary:hover {
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="paystack-popup">
+        <div class="popup-header">
+            <button class="back-btn" onclick="goBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+            <div class="title">Pay with Mobile Money</div>
+            <div style="width: 28px;"></div>
+        </div>
+
+        <div class="amount-section">
+            <div class="amount-label">You're paying</div>
+            <div class="amount-value" id="displayAmount">₦0.00</div>
+            <div class="merchant-name">to <span id="merchantName">LocalConnect</span></div>
+        </div>
+
+        <div class="providers-section" id="providersSection">
+            <h3>Select your provider</h3>
+
+            <div class="provider-card" onclick="selectProvider('opay')">
+                <div class="provider-logo">
+                    <img src="/images/Payments/opay-logo.png" alt="OPay">
+                </div>
+                <div class="provider-info">
+                    <div class="provider-name">OPay</div>
+                    <div class="provider-desc">Fast & secure payments</div>
+                </div>
+                <div class="provider-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="provider-card" onclick="selectProvider('moniepoint')">
+                <div class="provider-logo">
+                    <img src="/images/Payments/moniepoint-logo.png" alt="Moniepoint">
+                </div>
+                <div class="provider-info">
+                    <div class="provider-name">Moniepoint</div>
+                    <div class="provider-desc">Business banking made easy</div>
+                </div>
+                <div class="provider-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="provider-card" onclick="selectProvider('palmpay')">
+                <div class="provider-logo">
+                    <img src="/images/Payments/palmpay-logo.png" alt="PalmPay">
+                </div>
+                <div class="provider-info">
+                    <div class="provider-name">PalmPay</div>
+                    <div class="provider-desc">Your money, your way</div>
+                </div>
+                <div class="provider-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="phone-section" id="phoneSection">
+            <div class="selected-provider">
+                <div class="provider-logo" id="selectedLogo"></div>
+                <span class="selected-provider-name" id="selectedName"></span>
+                <button class="change-btn" onclick="changeProvider()">Change</button>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" placeholder="08012345678" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="sendPaymentRequest()">
+                Send payment request
+            </button>
+
+            <button class="cancel-btn" onclick="goBack()">
+                Cancel
+            </button>
+        </div>
+
+        <div class="secure-badge">
+            <svg viewBox="0 0 14 16" fill="currentColor">
+                <rect x="1" y="6" width="12" height="9" rx="2" fill="#687179"/>
+                <path d="M3 6V4c0-2.21 1.79-4 4-4s4 1.79 4 4v2" stroke="#687179" stroke-width="2" fill="none"/>
+            </svg>
+            Secured by Paystack
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content" id="loadingContent">
+            <div class="spinner"></div>
+            <div class="loading-text">Sending request</div>
+            <div class="loading-subtext">Please wait...</div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="cancel-modal" id="cancelModal">
+        <div class="cancel-modal-content">
+            <h3>Cancel Payment?</h3>
+            <p>Are you sure you want to cancel this payment? Your order will not be processed.</p>
+            <div class="cancel-modal-buttons">
+                <button class="cancel-modal-btn secondary" onclick="closeCancelModal()">Continue Payment</button>
+                <button class="cancel-modal-btn primary" onclick="confirmCancel()">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="error-modal" id="errorModal">
+        <div class="error-modal-content">
+            <div class="error-icon">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <path d="M8 8L24 24M8 24L24 8" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Payment Failed</h3>
+            <p id="errorMessage">Something went wrong. Please try again.</p>
+            <button class="error-modal-btn" onclick="closeErrorModal()">Try Again</button>
+        </div>
+    </div>
+
+    <style>
+        .error-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .error-modal.show { display: flex; }
+        .error-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .error-icon svg { width: 32px; height: 32px; }
+        .error-modal-content h3 {
+            font-size: 20px;
+            color: #011b33;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .error-modal-content p {
+            font-size: 14px;
+            color: #687179;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .error-modal-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: #00c3f7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .error-modal-btn:hover { background: #00b0e0; }
+    </style>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('orderId');
+        const amount = params.get('amount');
+        const email = params.get('email');
+        const vendorName = params.get('vendor') || 'LocalConnect';
+
+        let selectedProvider = null;
+
+        const providers = {
+            opay: {
+                name: 'OPay',
+                logo: '/images/Payments/opay-logo.png'
+            },
+            moniepoint: {
+                name: 'Moniepoint',
+                logo: '/images/Payments/moniepoint-logo.png'
+            },
+            palmpay: {
+                name: 'PalmPay',
+                logo: '/images/Payments/palmpay-logo.png'
+            }
+        };
+
+        function formatCurrency(val) {
+            return '₦' + parseFloat(val).toLocaleString('en-NG', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        if (amount) {
+            document.getElementById('displayAmount').textContent = formatCurrency(amount);
+        }
+        document.getElementById('merchantName').textContent = vendorName;
+
+        function selectProvider(provider) {
+            selectedProvider = provider;
+            const providerInfo = providers[provider];
+
+            document.getElementById('selectedLogo').className = 'provider-logo';
+            document.getElementById('selectedLogo').innerHTML = `<img src="${providerInfo.logo}" alt="${providerInfo.name}">`;
+            document.getElementById('selectedName').textContent = providerInfo.name;
+
+            document.getElementById('providersSection').style.display = 'none';
+            document.getElementById('phoneSection').classList.add('show');
+            document.getElementById('phoneNumber').focus();
+        }
+
+        function changeProvider() {
+            selectedProvider = null;
+            document.getElementById('providersSection').style.display = 'block';
+            document.getElementById('phoneSection').classList.remove('show');
+            document.getElementById('phoneNumber').value = '';
+        }
+
+        async function sendPaymentRequest() {
+            const phone = document.getElementById('phoneNumber').value.trim();
+
+            if (!phone || phone.length < 10) {
+                showError('Please enter a valid phone number');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingContent = document.getElementById('loadingContent');
+
+            loadingOverlay.classList.add('show');
+
+            // Simulate sending request
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Show "check your app" message
+            loadingContent.innerHTML = `
+                <div class="phone-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                </div>
+                <div class="loading-text">Check your ${providers[selectedProvider].name} app</div>
+                <div class="loading-subtext">Approve the payment request to continue</div>
+            `;
+
+            // Wait for "approval" (simulate)
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            try {
+                const reference = 'mock_' + orderId + '_' + Date.now();
+
+                const res = await fetch('/api/payments/confirm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        reference: reference,
+                        amount: amount
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    loadingContent.innerHTML = `
+                        <div class="success-icon">
+                            <svg viewBox="0 0 32 32" fill="none">
+                                <path d="M8 16l6 6L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="loading-text" style="color:#27ae60;">Payment Successful!</div>
+                        <div class="loading-subtext">Redirecting...</div>
+                    `;
+
+                    localStorage.removeItem('localconnect_cart');
+
+                    setTimeout(() => {
+                        window.location.href = 'my-orders.html';
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Payment failed');
+                }
+            } catch (error) {
+                loadingOverlay.classList.remove('show');
+                submitBtn.disabled = false;
+                showError(error.message || 'Payment processing failed. Please try again.');
+            }
+        }
+
+        function goBack() {
+            document.getElementById('cancelModal').classList.add('show');
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancelModal').classList.remove('show');
+        }
+
+        function confirmCancel() {
+            window.location.href = 'checkout.html';
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.add('show');
+        }
+
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.remove('show');
+        }
+
+        if (!orderId) {
+            showError('Invalid payment session. Redirecting...');
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

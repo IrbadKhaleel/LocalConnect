@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #7bb042 0%, #6a9e3a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: wiggle 3s infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #7bb042;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .suggestions {
+            margin-top: 48px;
+            background: rgba(255,255,255,0.1);
+            padding: 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .suggestions h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .suggestions ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .suggestions li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .suggestions li:before {
+            content: "›";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #fc7217;
+        }
+
+        .suggestions a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .suggestions a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 80px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-icon">🍽️</div>
+        <div class="error-code">404</div>
+        <h1>Oops! This Page Went Missing</h1>
+        <p>
+            Looks like this page took a wrong turn on the way to your table.
+            Don't worry, we'll help you find what you're looking for!
+        </p>
+
+        <div class="buttons">
+            <a href="/" class="btn btn-primary">Go to Homepage</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        </div>
+
+        <div class="suggestions">
+            <h3>Where would you like to go?</h3>
+            <ul>
+                <li><a href="/customer-home.html">Browse Delicious Food</a></li>
+                <li><a href="/customer-home.html">Explore Vendors</a></li>
+                <li><a href="/login.html">Login to Your Account</a></li>
+                <li><a href="/register.html">Create an Account</a></li>
+                <li><a href="/contact.html">Contact Support</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

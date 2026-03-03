@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #474747;
+            line-height: 1.6;
+            background: #F8F9FA;
+        }
+
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 20px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        /* TEXT LOGO STYLES */
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        .logo:hover .logo-text {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #474747;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7bb042;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #7bb042 0%, #6a9e3a 100%);
+            color: white;
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: -40px auto 60px;
+            background: white;
+            padding: 60px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid #E9ECEF;
+        }
+
+        .content h2 {
+            font-size: 32px;
+            margin: 40px 0 20px;
+            color: #7bb042;
+            font-weight: 700;
+        }
+
+        .content h2:first-child {
+            margin-top: 0;
+        }
+
+        .content p {
+            margin-bottom: 16px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .value-card {
+            padding: 24px;
+            background: #F8F9FA;
+            border-radius: 12px;
+            border-left: 4px solid #7bb042;
+        }
+
+        .value-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #474747;
+            font-weight: 600;
+        }
+
+        .value-card p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .footer {
+            background: #474747;
+            color: white;
+            text-align: center;
+            padding: 32px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: #95a5a6;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #7bb042;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 32px 24px;
+                margin: -40px 16px 40px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-text">Local<span class="logo-accent">Connect</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/login.html">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>About LocalConnect</h1>
+        <p>Connecting communities through delicious food</p>
+    </section>
+
+    <div class="content">
+        <h2>Our Story</h2>
+        <p>
+            LocalConnect was founded with a simple mission: to bridge the gap between local food vendors and hungry customers in Kano, Nigeria. We recognized that many talented local chefs and food vendors lacked the digital infrastructure to reach a broader audience, while customers struggled to discover quality local cuisine.
+        </p>
+        <p>
+            What started as a small project to support local businesses has grown into a thriving marketplace that empowers vendors and delights customers across the city. We're proud to be part of the local food ecosystem, creating opportunities and bringing communities together through the universal language of food.
+        </p>
+
+        <h2>Our Mission</h2>
+        <p>
+            To empower local food vendors with technology and provide customers with convenient access to authentic, quality meals while supporting the local economy and fostering community connections.
+        </p>
+
+        <h2>Our Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>Community First</h3>
+                <p>We prioritize supporting local businesses and building strong community relationships.</p>
+            </div>
+            <div class="value-card">
+                <h3>Quality Assurance</h3>
+                <p>We maintain high standards for food quality and service excellence.</p>
+            </div>
+            <div class="value-card">
+                <h3>Trust & Safety</h3>
+                <p>We ensure secure transactions and protect user privacy at every step.</p>
+            </div>
+            <div class="value-card">
+                <h3>Innovation</h3>
+                <p>We continuously improve our platform to better serve our community.</p>
+            </div>
+        </div>
+
+        <h2>Why Choose LocalConnect?</h2>
+        <p>
+            <strong>For Customers:</strong> Enjoy convenient access to authentic local cuisine with secure payment options, real-time order tracking, and quality assurance through our vendor rating system.
+        </p>
+        <p>
+            <strong>For Vendors:</strong> Grow your business with our easy-to-use platform, reach more customers, track your sales with detailed analytics, and receive timely payments with transparent fees.
+        </p>
+
+        <h2>Our Commitment</h2>
+        <p>
+            We're committed to being more than just a food delivery platform. We're building a sustainable ecosystem that supports local entrepreneurs, provides flexible earning opportunities, and brings the joy of delicious food to every table in our community.
+        </p>
+        <p>
+            Thank you for being part of the LocalConnect family. Together, we're strengthening our local food culture and economy, one meal at a time.
+        </p>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/terms.html">Terms</a>
+        </div>
+        <p>&copy; 2026 LocalConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>

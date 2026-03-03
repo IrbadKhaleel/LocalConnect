@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vendor Menu Management - LocalConnect">
+    <title>Menu Management - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* TEXT LOGO STYLES */
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        .nav-brand:hover .logo-text {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            color: #000000;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #7bb042;
+            text-decoration: none;
+        }
+
+        .nav-brand span {
+            color: #fc7217;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #474747;
+            font-weight: 500;
+            padding: 8px 4px;
+            transition: color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            color: #7bb042;
+        }
+
+        .nav-links a.active {
+            color: #7bb042;
+            border-bottom-color: #7bb042;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-user span {
+            color: #7F8C8D;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #7bb042;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #6a9e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(123, 176, 66, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Section Styles */
+        .section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            color: #7bb042;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #E9ECEF;
+            font-weight: 700;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #474747;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7bb042;
+            box-shadow: 0 0 0 4px rgba(123, 176, 66, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #7bb042;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6a9e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(123, 176, 66, 0.3);
+        }
+
+        .btn-secondary {
+            background: #E9ECEF;
+            color: #474747;
+        }
+
+        .btn-secondary:hover {
+            background: #bdc3c7;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Menu Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item-card {
+            background: #F8F9FA;
+            border: 2px solid #E9ECEF;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .menu-item-card:hover {
+            border-color: #7bb042;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .menu-item-card h3 {
+            font-size: 18px;
+            color: #474747;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .menu-item-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #7bb042;
+            margin-bottom: 8px;
+        }
+
+        .menu-item-description {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .menu-item-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .menu-item-status.available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .menu-item-status.unavailable {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .menu-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .menu-item-actions .btn {
+            flex: 1;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-edit {
+            background: #7bb042;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #6a9e3a;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #7F8C8D;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Message */
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #E9ECEF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            color: #474747;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #7F8C8D;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #474747;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #E9ECEF;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #7bb042;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/vendor-dashboard.html" class="nav-brand">
+            <span class="logo-text">Local<span class="logo-accent">Connect</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/vendor-dashboard.html">Dashboard</a>
+            <a href="/vendor-orders.html">Orders</a>
+            <a href="/vendor-menu.html" class="active">Menu</a>
+            <a href="/vendor-wallet.html">Wallet</a>
+            <a href="/vendor-analytics.html">Analytics</a>
+        </div>
+        <div class="nav-user">
+            <span id="vendorName">Welcome, Vendor</span>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Message Display -->
+        <div id="message" class="message"></div>
+
+        <!-- Business Profile Section -->
+        <div class="section">
+            <h2>Business Profile</h2>
+            <form id="profileForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="business_name">Business Name *</label>
+                        <input
+                            type="text"
+                            id="business_name"
+                            name="business_name"
+                            required
+                            placeholder="Enter your business name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select category...</option>
+                            <option value="Fast Food">Fast Food</option>
+                            <option value="Traditional Cuisine">Traditional Cuisine</option>
+                            <option value="Bakery">Bakery</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Street Food">Street Food</option>
+                            <option value="Catering">Catering</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="business_address">Business Address</label>
+                        <input
+                            type="text"
+                            id="business_address"
+                            name="business_address"
+                            placeholder="Enter your business address"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="operating_hours">Operating Hours</label>
+                        <input
+                            type="text"
+                            id="operating_hours"
+                            name="operating_hours"
+                            placeholder="e.g., Mon-Fri: 9AM-5PM"
+                        >
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="3"
+                            placeholder="Describe your business..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo_url">Logo URL</label>
+                        <input
+                            type="text"
+                            id="logo_url"
+                            name="logo_url"
+                            placeholder="https://example.com/logo.png"
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Profile</button>
+            </form>
+        </div>
+
+        <!-- Menu Items Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Menu Items</h2>
+                <button id="addMenuItemBtn" class="btn btn-primary">+ Add Menu Item</button>
+            </div>
+
+            <div id="menuItemsGrid" class="menu-grid">
+                <!-- Menu items will be dynamically loaded here -->
+            </div>
+
+            <div id="emptyMenuState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">🍽️</div>
+                <p>No menu items yet. Click "Add Menu Item" to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Item Modal -->
+    <div id="menuItemModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Menu Item</h3>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="menuItemForm">
+                    <div class="form-group">
+                        <label for="item_name">Item Name *</label>
+                        <input
+                            type="text"
+                            id="item_name"
+                            name="name"
+                            required
+                            placeholder="Enter item name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item_description">Description</label>
+                        <textarea
+                            id="item_description"
+                            name="description"
+                            rows="3"
+                            placeholder="Describe this menu item..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item_price">Price * (₦)</label>
+                        <input
+                            type="number"
+                            id="item_price"
+                            name="price"
+                            required
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item_image_url">Image URL</label>
+                        <input
+                            type="text"
+                            id="item_image_url"
+                            name="image_url"
+                            placeholder="https://example.com/item.jpg"
+                        >
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="item_available"
+                                name="available"
+                                checked
+                            >
+                            Item Available
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeMenuItemModal()">Cancel</button>
+                <button type="button" id="saveMenuItemBtn" class="btn btn-primary">Save Item</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 style="color: #e74c3c;">Delete Menu Item</h3>
+                <button class="close-btn" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🗑️</div>
+                <p style="margin-bottom: 12px;">Are you sure you want to delete</p>
+                <p style="font-weight: 700; font-size: 18px; color: #474747; margin-bottom: 16px;">"<span id="itemToDeleteName"></span>"?</p>
+                <p style="color: #e74c3c; font-weight: 600; font-size: 14px;">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="btn btn-delete" onclick="confirmDeleteItem()">Delete Item</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/vendor.js"></script>
+</body>
+</html>

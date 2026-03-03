@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            color: #474747;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* TEXT LOGO STYLES */
+        .logo-brand {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        @media (max-width: 768px) {
+            .logo-brand {
+                font-size: 24px;
+            }
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #7F8C8D;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #7bb042;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #6a9e3a;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #7bb042;
+            border-bottom-color: #7bb042;
+        }
+
+        .tab:hover {
+            color: #7bb042;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid #E9ECEF;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #474747;
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            color: #7bb042;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .chart-container h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        /* Table */
+        .data-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #E9ECEF;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .table-header h3 {
+            font-size: 18px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 14px 10px 40px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 14px;
+            width: 250px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #7bb042;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 24px;
+            background: #F8F9FA;
+            font-weight: 600;
+            font-size: 14px;
+            color: #474747;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-top: 1px solid #e9ecef;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #F8F9FA;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .badge-customer {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-vendor {
+            background: rgba(123, 176, 66, 0.15);
+            color: #6a9e3a;
+        }
+
+        .badge-admin {
+            background: rgba(252, 114, 23, 0.15);
+            color: #e56510;
+        }
+
+        .badge-pending {
+            background: rgba(252, 114, 23, 0.15);
+            color: #e56510;
+        }
+
+        .badge-preparing {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .badge-ready {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-completed {
+            background: rgba(123, 176, 66, 0.15);
+            color: #6a9e3a;
+        }
+
+        .badge-cancelled {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 48px;
+            color: #7f8c8d;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 64px 24px;
+            color: #7f8c8d;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        /* Access Denied */
+        .access-denied {
+            text-align: center;
+            padding: 100px 24px;
+        }
+
+        .access-denied h2 {
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+
+        .access-denied p {
+            color: #7F8C8D;
+            margin-bottom: 24px;
+        }
+
+        .access-denied a {
+            color: #7bb042;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .access-denied a:hover {
+            text-decoration: underline;
+        }
+
+        /* Delete Button */
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-delete:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .text-muted {
+            color: #95a5a6;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+
+            .tab {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-brand">Local<span class="logo-accent">Connect</span></span>
+            <span class="logo-text">Admin Panel</span>
+        </div>
+        <div class="nav-right">
+            <div class="user-info">
+                <span id="adminName">Admin User</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Access Denied (hidden by default) -->
+    <div class="access-denied" id="accessDenied" style="display: none;">
+        <h2>Access Denied</h2>
+        <p>You don't have permission to access the admin panel.</p>
+        <a href="/login.html">Return to Login</a>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContent">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Platform Dashboard</h1>
+            <p>Monitor and manage LocalConnect platform</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="users">Users</button>
+            <button class="tab" data-tab="orders">Orders</button>
+            <button class="tab" data-tab="analytics">Analytics</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overview-tab">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value" id="totalUsers">-</div>
+                    <div class="stat-change" id="usersChange">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value" id="totalOrders">-</div>
+                    <div class="stat-change" id="ordersChange">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-value" id="totalRevenue">-</div>
+                    <div class="stat-change" id="revenueChange">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Platform Commission</div>
+                    <div class="stat-value" id="platformCommission">-</div>
+                    <div class="stat-change" id="commissionChange">10% of revenue</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Orders This Week</h3>
+                <canvas id="activityChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div class="tab-content" id="users-tab">
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>All Users</h3>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="userSearch" placeholder="Search users..." onkeyup="filterUsers()">
+                    </div>
+                </div>
+                <div id="usersTableContainer" class="table-scroll">
+                    <div class="loading">Loading users...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div class="tab-content" id="orders-tab">
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>All Orders</h3>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="orderSearch" placeholder="Search orders..." onkeyup="filterOrders()">
+                    </div>
+                </div>
+                <div id="ordersTableContainer" class="table-scroll">
+                    <div class="loading">Loading orders...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analytics-tab">
+            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="chart-container">
+                    <h3>Revenue Trend (Last 7 Days)</h3>
+                    <canvas id="revenueChart" height="150"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Orders by Status</h3>
+                    <canvas id="statusChart" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        let activityChartInstance = null;
+        let revenueChartInstance = null;
+        let statusChartInstance = null;
+
+        // Check admin authentication
+        function checkAdminAuth() {
+            const user = getUserInfo();
+            if (!user || user.role !== 'admin') {
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('accessDenied').style.display = 'block';
+                return false;
+            }
+            document.getElementById('adminName').textContent = user.name || 'Admin';
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('localconnect_token');
+            localStorage.removeItem('localconnect_user');
+            window.location.href = '/login.html';
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // Add active class to selected tab
+                this.classList.add('active');
+                document.getElementById(tabName + '-tab').classList.add('active');
+
+                // Load data for tab
+                if (tabName === 'users') loadUsers();
+                if (tabName === 'orders') loadOrders();
+                if (tabName === 'analytics') loadAnalytics();
+            });
+        });
+
+        // Load overview stats
+        async function loadOverview() {
+            try {
+                const response = await fetch('/api/admin/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load stats');
+
+                const data = await response.json();
+                const stats = data.stats;
+
+                document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+                document.getElementById('totalOrders').textContent = stats.totalOrders || 0;
+                document.getElementById('totalRevenue').textContent = formatCurrency(stats.totalRevenue || 0);
+                document.getElementById('platformCommission').textContent = formatCurrency(stats.platformCommission || 0);
+
+                const usersByRole = stats.usersByRole || {};
+                const ordersByStatus = stats.ordersByStatus || {};
+                document.getElementById('usersChange').textContent = `${usersByRole.customer || 0} customers, ${usersByRole.vendor || 0} vendors`;
+                document.getElementById('ordersChange').textContent = `${ordersByStatus.pending || 0} pending`;
+                document.getElementById('revenueChange').textContent = `All time`;
+
+                // Fetch analytics for activity chart
+                loadActivityChart();
+
+            } catch (error) {
+                console.error('Load overview error:', error);
+                document.getElementById('totalUsers').textContent = 'Error';
+                document.getElementById('totalOrders').textContent = 'Error';
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load users');
+
+                const data = await response.json();
+                displayUsers(data.users || []);
+
+            } catch (error) {
+                console.error('Load users error:', error);
+                document.getElementById('usersTableContainer').innerHTML = '<div class="empty-state">Failed to load users</div>';
+            }
+        }
+
+        // Display users
+        function displayUsers(users) {
+            if (users.length === 0) {
+                document.getElementById('usersTableContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><h3>No users found</h3></div>';
+                return;
+            }
+
+            // Get current admin user
+            const currentUser = getUserInfo();
+
+            const html = `
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => {
+                            const isCurrentUser = currentUser && currentUser.id === user.id;
+                            return `
+                            <tr>
+                                <td>#${user.id}</td>
+                                <td>${escapeHtml(user.name)}</td>
+                                <td>${escapeHtml(user.email)}</td>
+                                <td><span class="badge badge-${user.role}">${user.role}</span></td>
+                                <td>${user.phone || 'N/A'}</td>
+                                <td>${formatDate(user.created_at)}</td>
+                                <td>
+                                    ${isCurrentUser
+                                        ? '<span class="text-muted">Current User</span>'
+                                        : `<button class="btn-delete" onclick="confirmDeleteUser(${user.id}, '${escapeHtml(user.email)}', '${user.role}')">Delete</button>`
+                                    }
+                                </td>
+                            </tr>
+                        `;}).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('usersTableContainer').innerHTML = html;
+        }
+
+        // Filter users
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Load orders
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/admin/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load orders');
+
+                const data = await response.json();
+                displayOrders(data.orders || []);
+
+            } catch (error) {
+                console.error('Load orders error:', error);
+                document.getElementById('ordersTableContainer').innerHTML = '<div class="empty-state">Failed to load orders</div>';
+            }
+        }
+
+        // Display orders
+        function displayOrders(orders) {
+            if (orders.length === 0) {
+                document.getElementById('ordersTableContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><h3>No orders found</h3></div>';
+                return;
+            }
+
+            const html = `
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Vendor</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td>${escapeHtml(order.customer_name || 'Unknown')}</td>
+                                <td>${escapeHtml(order.vendor_name || 'Unknown')}</td>
+                                <td>${formatCurrency(order.total_amount)}</td>
+                                <td><span class="badge badge-${order.status}">${order.status}</span></td>
+                                <td>${formatDate(order.created_at)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('ordersTableContainer').innerHTML = html;
+        }
+
+        // Filter orders
+        function filterOrders() {
+            const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#ordersTable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Load activity chart for overview
+        async function loadActivityChart() {
+            try {
+                const response = await fetch('/api/admin/analytics?period=7', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load analytics');
+
+                const data = await response.json();
+                const dailyOrders = data.analytics?.dailyOrders || [];
+
+                // Extract order counts for the chart
+                const orderCounts = dailyOrders.map(d => d.orders || 0);
+                createActivityChart(orderCounts);
+
+            } catch (error) {
+                console.error('Load activity chart error:', error);
+                createActivityChart([]);
+            }
+        }
+
+        // Load analytics
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/admin/analytics?period=7', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load analytics');
+
+                const data = await response.json();
+                const analytics = data.analytics || {};
+
+                createRevenueChart(analytics.dailyOrders || []);
+                createStatusChart(analytics.statusDistribution || {});
+
+            } catch (error) {
+                console.error('Load analytics error:', error);
+            }
+        }
+
+        // Create activity chart
+        function createActivityChart(data) {
+            const ctx = document.getElementById('activityChart');
+
+            if (activityChartInstance) {
+                activityChartInstance.destroy();
+            }
+
+            const defaultData = [0, 0, 0, 0, 0, 0, 0];
+            const chartData = data.length > 0 ? data : defaultData;
+
+            activityChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Orders',
+                        data: chartData,
+                        borderColor: '#7bb042',
+                        backgroundColor: 'rgba(123, 176, 66, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create revenue chart
+        function createRevenueChart(data) {
+            const ctx = document.getElementById('revenueChart');
+
+            if (revenueChartInstance) {
+                revenueChartInstance.destroy();
+            }
+
+            const labels = data.length > 0 ? data.map(d => formatShortDate(d.date)) : ['No data'];
+            const values = data.length > 0 ? data.map(d => parseFloat(d.revenue) || 0) : [0];
+
+            revenueChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue (₦)',
+                        data: values,
+                        backgroundColor: '#7bb042',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create status chart
+        function createStatusChart(data) {
+            const ctx = document.getElementById('statusChart');
+
+            if (statusChartInstance) {
+                statusChartInstance.destroy();
+            }
+
+            // Define status colors: completed=green, pending=orange, preparing=blue, ready=cyan, cancelled=red
+            const statusColors = {
+                'completed': '#7bb042',
+                'pending': '#fc7217',
+                'preparing': '#3498db',
+                'ready': '#17a2b8',
+                'cancelled': '#ef4444'
+            };
+
+            const labels = Object.keys(data).length > 0 ? Object.keys(data) : ['No orders'];
+            const values = Object.values(data).length > 0 ? Object.values(data) : [0];
+            const colors = labels.map(label => statusColors[label] || '#95a5a6');
+
+            statusChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels.map(l => l.charAt(0).toUpperCase() + l.slice(1)),
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+            });
+        }
+
+        // Helper functions
+        function formatCurrency(amount) {
+            return '₦' + parseFloat(amount || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            return new Date(date).toLocaleDateString('en-NG', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatShortDate(date) {
+            if (!date) return 'N/A';
+            return new Date(date).toLocaleDateString('en-NG', {
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Confirm delete user
+        function confirmDeleteUser(userId, email, role) {
+            const message = `Are you sure you want to delete this ${role}?\n\nEmail: ${email}\n\nThis action cannot be undone and will delete all associated data (orders, reviews, menu items, etc.).`;
+
+            if (confirm(message)) {
+                deleteUser(userId);
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId) {
+            try {
+                const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to delete user');
+                }
+
+                alert(data.message || 'User deleted successfully');
+
+                // Reload users table
+                loadUsers();
+
+                // Reload stats (user count changed)
+                loadOverview();
+
+            } catch (error) {
+                console.error('Delete user error:', error);
+                alert('Failed to delete user: ' + error.message);
+            }
+        }
+
+        // Initialize
+        if (checkAdminAuth()) {
+            loadOverview();
+        }
+    </script>
+</body>
+</html>

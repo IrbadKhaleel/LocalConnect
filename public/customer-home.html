@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Vendors - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* TEXT LOGO STYLES */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        .logo-link:hover .logo-text {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+        }
+
+        /* FORCE CART AND MY ORDERS BUTTONS WHITE */
+        .btn-secondary,
+        .header-auth .btn-secondary,
+        #userInfo .btn-secondary,
+        a.btn-secondary {
+            background: white !important;
+            background-color: white !important;
+            color: #7bb042 !important;
+            border: 2px solid #7bb042 !important;
+        }
+
+        .btn-secondary:hover,
+        .header-auth .btn-secondary:hover,
+        #userInfo .btn-secondary:hover,
+        a.btn-secondary:hover {
+            background: #f8f9fa !important;
+            background-color: #f8f9fa !important;
+            color: #7bb042 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(123,176,66,0.2) !important;
+        }
+
+        /* FORCE VIEW MENU BUTTON STYLES */
+        .vendor-card .btn,
+        .vendor-card .btn-primary,
+        .vendor-card a.btn,
+        .vendor-card a.btn-primary {
+            background: white !important;
+            background-color: white !important;
+            color: #7bb042 !important;
+            border: 2px solid #7bb042 !important;
+        }
+
+        .vendor-card .btn:hover,
+        .vendor-card .btn-primary:hover,
+        .vendor-card a.btn:hover,
+        .vendor-card a.btn-primary:hover {
+            background: #f8f9fa !important;
+            background-color: #f8f9fa !important;
+            color: #7bb042 !important;
+            border-color: #7bb042 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(123,176,66,0.2) !important;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #E9ECEF;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #7F8C8D;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 48px 16px 48px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #474747;
+            background: #fff;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input::placeholder {
+            color: #95a5a6;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #7bb042;
+            box-shadow: 0 0 0 4px rgba(123, 176, 66, 0.1);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #E9ECEF;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7F8C8D;
+            transition: all 0.2s;
+        }
+
+        .clear-search:hover {
+            background: #d4dbe0;
+            color: #474747;
+        }
+
+        .filter-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .category-filter {
+            padding: 12px 40px 12px 16px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #474747;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237F8C8D' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 14px center;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            min-width: 180px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .category-filter:focus {
+            outline: none;
+            border-color: #7bb042;
+            box-shadow: 0 0 0 4px rgba(123, 176, 66, 0.1);
+        }
+
+        .category-filter:hover {
+            border-color: #bdc3c7;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-left: auto;
+        }
+
+        .results-count strong {
+            color: #474747;
+        }
+
+        /* No results state */
+        .no-results {
+            text-align: center;
+            padding: 48px 24px;
+            color: #7F8C8D;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .no-results h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        @media (max-width: 600px) {
+            .search-filter-section {
+                padding: 16px;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .category-filter {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .results-count {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="customer-header">
+        <div class="header-content">
+            <h1><a href="/customer-home.html" class="logo-link"><span class="logo-text">Local<span class="logo-accent">Connect</span></span></a></h1>
+            <div class="header-auth">
+                <div id="authLinks" style="display: flex; gap: 1rem;">
+                    <a href="/login.html" class="auth-link">Login</a>
+                    <a href="/register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+                <div id="userInfo" style="display: none; gap: 1rem; align-items: center;">
+                    <!-- User info will be inserted here by auth.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="customer-container">
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="text"
+                    id="searchBar"
+                    placeholder="Search vendors by name, category, or description..."
+                    onkeyup="filterVendors()"
+                />
+                <button class="clear-search" id="clearSearch" onclick="clearSearch()" style="display: none;">✕</button>
+            </div>
+            <div class="filter-controls">
+                <select id="categoryFilter" class="category-filter" onchange="filterVendors()">
+                    <option value="">All Categories</option>
+                </select>
+                <div id="resultsCount" class="results-count"></div>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+        <div id="loadingSpinner" class="loading-spinner" style="display:none;">
+            <div class="spinner"></div>
+            <p>Loading vendors...</p>
+        </div>
+        <div id="vendorGrid" class="vendor-grid"></div>
+        <div id="emptyState" class="empty-state" style="display:none;">
+            <p>No vendors found</p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/customer.js"></script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Menu - LocalConnect</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* TEXT LOGO STYLES */
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7bb042;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #fc7217;
+        }
+
+        .logo-link:hover .logo-text {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+        }
+
+        .btn-secondary,
+        #userInfo .btn-secondary {
+            background: white !important;
+            color: #7bb042 !important;
+            border: 2px solid #7bb042 !important;
+        }
+        .btn-secondary:hover,
+        #userInfo .btn-secondary:hover {
+            background: #f8f9fa !important;
+            transform: translateY(-2px) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="customer-header">
+        <div class="header-content">
+            <h1><a href="/customer-home.html" class="logo-link"><span class="logo-text">Local<span class="logo-accent">Connect</span></span></a></h1>
+            <div class="header-auth">
+                <div id="authLinks" style="display: flex; gap: 1rem;">
+                    <a href="/login.html" class="auth-link">Login</a>
+                    <a href="/register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+                <div id="userInfo" style="display: none; gap: 1rem; align-items: center;">
+                    <!-- User info will be inserted here by auth.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="customer-container">
+        <div id="message" class="message"></div>
+        <a href="/customer-home.html" class="back-link">← Back to Browse</a>
+
+        <div id="vendorInfo" class="vendor-info-banner"></div>
+
+        <div class="vendor-detail-layout">
+            <div class="menu-items-section">
+                <h2>Menu</h2>
+                <!-- Menu Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input
+                            type="text"
+                            id="menuSearch"
+                            placeholder="Search menu items..."
+                            onkeyup="filterMenuItems()"
+                        />
+                        <button class="clear-search" id="clearMenuSearch" onclick="clearMenuSearch()" style="display: none;">✕</button>
+                    </div>
+                </div>
+                <div id="menuItemsGrid" class="menu-items-grid"></div>
+                <div id="emptyMenu" class="empty-state" style="display:none;">
+                    <p>Menu coming soon! Check back later.</p>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="reviews-section">
+                    <h2>Customer Reviews</h2>
+                    <div id="reviewsContainer">
+                        <p>Loading reviews...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-sidebar" id="cartSidebar">
+                <div class="cart-header">
+                    <h3>Your Cart</h3>
+                    <button id="cartToggle" class="cart-toggle-btn">▼</button>
+                </div>
+                <div id="cartVendorName" class="cart-vendor-name"></div>
+                <div id="cartItems" class="cart-items"></div>
+                <div id="cartEmpty" class="cart-empty">Your cart is empty</div>
+                <div id="cartSummary" class="cart-summary" style="display:none;">
+                    <div class="cart-total">
+                        <strong>Total:</strong>
+                        <span id="cartTotal">₦0.00</span>
+                    </div>
+                    <button id="checkoutBtn" class="btn btn-primary btn-full">Checkout</button>
+                    <button id="clearCartBtn" class="btn btn-secondary btn-full" style="margin-top: 8px;">Clear Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Cart Modal -->
+    <div class="clear-cart-modal" id="clearCartModal">
+        <div class="clear-cart-modal-content">
+            <h3>Clear Cart?</h3>
+            <p>Are you sure you want to remove all items from your cart?</p>
+            <div class="clear-cart-modal-buttons">
+                <button class="clear-cart-modal-btn secondary" onclick="closeClearCartModal()">Cancel</button>
+                <button class="clear-cart-modal-btn primary" onclick="confirmClearCart()">Yes, Clear Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Switch Vendor Modal -->
+    <div class="clear-cart-modal" id="switchVendorModal">
+        <div class="clear-cart-modal-content">
+            <h3>Switch Vendor?</h3>
+            <p id="switchVendorMessage">Your cart contains items from another vendor. Clear cart to order from this vendor?</p>
+            <div class="clear-cart-modal-buttons">
+                <button class="clear-cart-modal-btn secondary" onclick="closeSwitchVendorModal()">Cancel</button>
+                <button class="clear-cart-modal-btn primary" onclick="confirmSwitchVendor()">Yes, Switch</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Search Container */
+        .search-container {
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #7F8C8D;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 48px 14px 48px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #7bb042;
+            box-shadow: 0 0 0 4px rgba(123, 176, 66, 0.1);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #E9ECEF;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clear-search:hover {
+            background: #d4dbe0;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 48px 24px;
+            color: #7F8C8D;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .no-results h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #474747;
+        }
+
+        /* Vendor Rating Banner */
+        .vendor-rating-banner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .vendor-rating-banner .stars {
+            color: #fc7217;
+            font-size: 18px;
+        }
+
+        .vendor-rating-banner .rating-text {
+            font-size: 14px;
+            color: #7F8C8D;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid #E9ECEF;
+        }
+
+        .reviews-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: #7bb042;
+            font-weight: 700;
+        }
+
+        .review-card {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .review-author {
+            font-weight: 600;
+            color: #474747;
+            margin-bottom: 4px;
+        }
+
+        .review-stars {
+            color: #fc7217;
+            font-size: 16px;
+        }
+
+        .review-date {
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        .review-text {
+            color: #687179;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 32px;
+            color: #7F8C8D;
+            background: #F8F9FA;
+            border-radius: 12px;
+        }
+
+        .error-text {
+            color: #ef4444;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .clear-cart-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .clear-cart-modal.show {
+            display: flex;
+        }
+
+        .clear-cart-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .clear-cart-modal-content h3 {
+            font-size: 20px;
+            color: #474747;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .clear-cart-modal-content p {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .clear-cart-modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .clear-cart-modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-cart-modal-btn.primary {
+            background: #ef4444;
+            color: white;
+        }
+
+        .clear-cart-modal-btn.primary:hover {
+            background: #dc2626;
+        }
+
+        .clear-cart-modal-btn.secondary {
+            background: #F8F9FA;
+            color: #474747;
+            border: 1.5px solid #E9ECEF;
+        }
+
+        .clear-cart-modal-btn.secondary:hover {
+            background: #E9ECEF;
+        }
+    </style>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/customer.js"></script>
+</body>
+</html>

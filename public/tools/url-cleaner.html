@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsplash URL Cleaner - LocalConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #7bb042;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #474747;
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            margin-bottom: 20px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #7bb042;
+        }
+
+        .output {
+            background: #f8f9fa;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px dashed #7bb042;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            min-height: 50px;
+        }
+
+        .output.empty {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        button {
+            background: #7bb042;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #6a9e3a;
+            transform: translateY(-2px);
+        }
+
+        button.secondary {
+            background: #fc7217;
+        }
+
+        button.secondary:hover {
+            background: #e66815;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .examples {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .examples h3 {
+            color: #474747;
+            margin-bottom: 15px;
+        }
+
+        .example-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .example-item strong {
+            color: #7bb042;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .example-item code {
+            color: #474747;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Unsplash URL Cleaner</h1>
+        <p>Convert messy Unsplash URLs into clean, fast-loading image links</p>
+
+        <label for="inputUrl">Paste Unsplash URL:</label>
+        <textarea id="inputUrl" rows="3" placeholder="https://images.unsplash.com/photo-1649240437402-8e46a4cdf6c8?q=80&w=1480&auto=format&..."></textarea>
+
+        <label>Clean URL (ready to use):</label>
+        <div id="outputUrl" class="output empty">Cleaned URL will appear here...</div>
+
+        <button onclick="cleanUrl()">Clean URL</button>
+        <button class="secondary" onclick="copyUrl()">Copy Clean URL</button>
+
+        <div id="success" class="success">✅ URL copied to clipboard!</div>
+
+        <div class="examples">
+            <h3>How it works:</h3>
+            <div class="example-item">
+                <strong>Before (messy):</strong>
+                <code>https://images.unsplash.com/photo-123?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8...</code>
+            </div>
+            <div class="example-item">
+                <strong>After (clean):</strong>
+                <code>https://images.unsplash.com/photo-123?w=400</code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cleanedUrl = '';
+
+        function cleanUrl() {
+            const input = document.getElementById('inputUrl').value.trim();
+            const output = document.getElementById('outputUrl');
+
+            if (!input) {
+                output.textContent = 'Please paste a URL first!';
+                output.className = 'output empty';
+                return;
+            }
+
+            try {
+                // Check if it's a valid Unsplash URL
+                if (!input.includes('unsplash.com')) {
+                    throw new Error('Not an Unsplash URL');
+                }
+
+                // If it's a page URL (unsplash.com/photos/...), extract photo ID
+                if (input.includes('unsplash.com/photos/')) {
+                    const photoId = input.split('/photos/')[1].split('?')[0].split('-').pop();
+                    cleanedUrl = `https://images.unsplash.com/photo-${photoId}?w=400`;
+                }
+                // If it's already an image URL, just clean parameters
+                else if (input.includes('images.unsplash.com/photo-')) {
+                    const baseUrl = input.split('?')[0];
+                    cleanedUrl = `${baseUrl}?w=400`;
+                }
+                else {
+                    throw new Error('Invalid Unsplash URL format');
+                }
+
+                output.textContent = cleanedUrl;
+                output.className = 'output';
+
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+                output.className = 'output empty';
+            }
+        }
+
+        function copyUrl() {
+            if (!cleanedUrl) {
+                alert('Please clean a URL first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(cleanedUrl).then(() => {
+                const success = document.getElementById('success');
+                success.style.display = 'block';
+                setTimeout(() => {
+                    success.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // Clean URL automatically when pasting
+        document.getElementById('inputUrl').addEventListener('paste', () => {
+            setTimeout(cleanUrl, 100);
+        });
+    </script>
+</body>
+</html>
