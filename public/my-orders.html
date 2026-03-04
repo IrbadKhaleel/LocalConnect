@@ -11,31 +11,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* TEXT LOGO STYLES */
-        /* Logo Styles */
+        /* Logo Styles - Using div instead of <a> to avoid link color inheritance */
         .logo {
-            font-size: 24px;
-            font-weight: 700;
-            cursor: pointer;
+            cursor: pointer !important;
             text-decoration: none;
             display: inline-block;
-        }
-
-        .logo-local {
-            color: #7bb042 !important; /* Green */
-            filter: none !important;
-        }
-
-        .logo-connect {
-            color: #fc7217 !important; /* Orange */
-            filter: none !important;
         }
 
         .logo:hover {
             transform: scale(1.02);
         }
 
-        /* Override any conflicting styles */
+        /* Ensure span colors are not overridden */
+        .logo span {
+            display: inline;
+        }
+
+        /* Force override any conflicting styles */
+        .logo,
+        .logo *,
         .dashboard-header .logo,
         .dashboard-header .logo span,
         h1 .logo,
@@ -45,8 +39,8 @@
         }
 
         @media (max-width: 768px) {
-            .logo {
-                font-size: 20px;
+            .logo span {
+                font-size: 20px !important;
             }
         }
 
@@ -642,7 +636,7 @@
 <body>
     <header class="dashboard-header">
         <div class="header-content">
-            <h1><a href="/customer-home.html" id="homeLink" class="logo"><span class="logo-local">Local</span><span class="logo-connect">Connect</span></a></h1>
+            <h1><div id="homeLink" class="logo" onclick="window.location.href='/customer-home.html'" style="cursor: pointer;"><span style="color: #7bb042 !important; font-weight: 700; font-size: 24px;">Local</span><span style="color: #fc7217 !important; font-weight: 700; font-size: 24px;">Connect</span></div></h1>
             <div class="header-actions">
                 <span id="userWelcome" class="vendor-name"></span>
                 <a href="/customer-home.html" id="backHomeLink" class="btn btn-secondary btn-sm" style="background: white !important; color: #7bb042 !important; border: 2px solid #7bb042 !important;">Browse Vendors</a>
