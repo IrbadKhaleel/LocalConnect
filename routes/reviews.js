@@ -45,7 +45,7 @@ router.post('/create', authenticateToken, async (req, res) => {
 
         // Insert review
         await pool.execute(
-            `INSERT INTO reviews (order_id, customer_id, vendor_id, rating, review_text)
+            `INSERT INTO reviews (order_id, customer_id, vendor_id, rating, comment)
              VALUES (?, ?, ?, ?, ?)`,
             [orderId, customerId, vendorId, rating, reviewText || null]
         );

@@ -86,13 +86,16 @@ CREATE TABLE payments (
 -- Reviews table
 CREATE TABLE reviews (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT,
     customer_id INT NOT NULL,
     vendor_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE
+    FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_order_review (order_id)
 );
 
 -- Vendor wallets table

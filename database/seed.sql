@@ -123,9 +123,9 @@ INSERT INTO order_items (order_id, menu_item_id, quantity, unit_price, subtotal)
 -- REVIEWS (order_id: 1, 2 | customer_id: 2 | vendor_id: 1, 2)
 -- =====================================================
 
-INSERT INTO reviews (customer_id, vendor_id, rating, comment) VALUES
-(2, 1, 5, 'Excellent food! The tuwo was perfect.'),
-(2, 2, 5, 'Amazing jollof rice!');
+INSERT INTO reviews (order_id, customer_id, vendor_id, rating, comment) VALUES
+(1, 2, 1, 5, 'Excellent food! The tuwo was perfect.'),
+(2, 2, 2, 5, 'Amazing jollof rice!');
 
 -- Done
 SELECT 'Seed data loaded successfully!' as status;

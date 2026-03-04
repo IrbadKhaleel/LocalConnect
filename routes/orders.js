@@ -70,7 +70,7 @@ router.get('/customer', authenticateToken, async (req, res) => {
              FROM orders o
              JOIN vendors v ON o.vendor_id = v.id
              JOIN users u ON v.user_id = u.id
-             LEFT JOIN reviews r ON o.customer_id = r.customer_id AND o.vendor_id = r.vendor_id
+             LEFT JOIN reviews r ON o.id = r.order_id
              WHERE o.customer_id = ?
              ORDER BY o.created_at DESC`,
             [customerId]
@@ -111,7 +111,7 @@ router.get('/customer/:customerId', authenticateToken, async (req, res) => {
             (r.id IS NOT NULL) as hasReview
      FROM orders o
      JOIN users u ON o.vendor_id = u.id
-     LEFT JOIN reviews r ON o.customer_id = r.customer_id AND o.vendor_id = r.vendor_id
+     LEFT JOIN reviews r ON o.id = r.order_id
      WHERE o.customer_id = ?
      ORDER BY o.created_at DESC`,
     [customerId]
