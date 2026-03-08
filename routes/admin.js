@@ -20,17 +20,17 @@ router.get('/stats', async (req, res) => {
             'SELECT COUNT(*) as count FROM orders'
         );
 
-        // Get total revenue (sum of all completed/ready orders)
+        // Get total revenue (sum of all completed/ready PAID orders)
         const [revenueResult] = await pool.execute(
             `SELECT COALESCE(SUM(total_amount), 0) as total FROM orders
-             WHERE status IN ('completed', 'ready')`
+             WHERE status IN ('completed', 'ready') AND payment_status = 'paid'`
         );
 
-        // Get platform commission (total_amount - vendor_amount for completed orders)
+        // Get platform commission (use commission_amount column directly for accurate 10% calculation)
         const [commissionResult] = await pool.execute(
-            `SELECT COALESCE(SUM(total_amount - COALESCE(vendor_amount, 0)), 0) as total
+            `SELECT COALESCE(SUM(commission_amount), 0) as total
              FROM orders
-             WHERE status IN ('completed', 'ready')`
+             WHERE status IN ('completed', 'ready') AND payment_status = 'paid'`
         );
 
         // Get counts by user role

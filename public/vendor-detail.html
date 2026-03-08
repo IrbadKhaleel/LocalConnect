@@ -11,25 +11,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* TEXT LOGO STYLES */
-        .logo-text {
-            font-size: 28px;
-            font-weight: 700;
-            color: #7bb042;
-            letter-spacing: -0.5px;
+        /* TEXT LOGO STYLES - Using div instead of <a> to avoid link color inheritance */
+        .logo {
+            cursor: pointer !important;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .logo-accent {
-            color: #fc7217;
-        }
-
-        .logo-link:hover .logo-text {
+        .logo:hover {
             transform: scale(1.02);
         }
 
+        .logo-local {
+            color: #7bb042 !important;
+            font-weight: 700;
+            font-size: 28px;
+        }
+
+        .logo-connect {
+            color: #fc7217 !important;
+            font-weight: 700;
+            font-size: 28px;
+        }
+
         @media (max-width: 768px) {
-            .logo-text {
-                font-size: 24px;
+            .logo-local,
+            .logo-connect {
+                font-size: 24px !important;
             }
         }
 
@@ -49,7 +57,7 @@
 <body>
     <div class="customer-header">
         <div class="header-content">
-            <h1><a href="/customer-home.html" class="logo-link"><span class="logo-text">Local<span class="logo-accent">Connect</span></span></a></h1>
+            <h1><div class="logo" onclick="window.location.href='/customer-home.html'" style="cursor: pointer;"><span class="logo-local">Local</span><span class="logo-connect">Connect</span></div></h1>
             <div class="header-auth">
                 <div id="authLinks" style="display: flex; gap: 1rem;">
                     <a href="/login.html" class="auth-link">Login</a>
