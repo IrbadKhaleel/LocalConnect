@@ -65,10 +65,15 @@
             font-weight: 700;
             color: #7bb042;
             text-decoration: none;
+            cursor: pointer;
         }
 
-        .nav-brand span {
-            color: #fc7217;
+        .logo-text {
+            color: #7bb042 !important;
+        }
+
+        .logo-accent {
+            color: #fc7217 !important;
         }
 
         .nav-links {
@@ -513,9 +518,9 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <a href="/vendor-dashboard.html" class="nav-brand">
+        <div class="nav-brand" onclick="window.location.href='/vendor-dashboard.html'">
             <span class="logo-text">Local<span class="logo-accent">Connect</span></span>
-        </a>
+        </div>
         <div class="nav-links">
             <a href="/vendor-dashboard.html">Dashboard</a>
             <a href="/vendor-orders.html">Orders</a>

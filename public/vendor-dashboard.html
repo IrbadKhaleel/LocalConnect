@@ -551,7 +551,6 @@
             // Check vendor role
             const user = getUserInfo();
             if (!user || user.role !== 'vendor') {
-                alert('Access denied. Vendor account required.');
                 logout();
                 return;
             }
